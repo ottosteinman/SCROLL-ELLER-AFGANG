@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Asbjørn</title>
+</head>
+<body>
+    <h1>About Me</h1>
+
+    <p>[Write who you are, your background, your personality, your interests]</p>
+
+    <p>[Add a fun fact or something personal and memorable]</p>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="application.html">My Application</a></li>
+            <li><a href="game/index.html">Play My Bar Game</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
