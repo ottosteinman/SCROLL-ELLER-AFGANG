@@ -34,7 +34,7 @@ function preload() {
     this.load.audio('jump2', 'assets/jump2.wav'); // HOP
     this.load.audio('jump3', 'assets/jump3.wav'); // HAP
     this.load.audio('jump4', 'assets/jump4.wav'); // HIP
-    this.load.audio('jump5', 'assets/jump5.wav'); // DAVA NAHUI - hvad var den russiske ting? 
+    this.load.audio('jump5', 'assets/jump5.wav'); // IDI NAHUI - hvad var den russiske ting? 
 }
 
 function create() {
