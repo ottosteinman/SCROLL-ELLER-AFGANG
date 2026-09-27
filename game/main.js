@@ -62,52 +62,56 @@ function create() {
 }
 
 function update() {
-    // Horizontal movement
+    // SNAPPY MOVEMENT
     if (cursors.left.isDown) {
-    player.setVelocityX(-200);
+        player.setVelocityX(-200);
     } else if (cursors.right.isDown) {
-    player.setVelocityX(200);
+        player.setVelocityX(200);
     } else {
-    player.setVelocityX(0);
+        player.setVelocityX(0);
     }
 
-
-    // Track coyote time
+    // COYOTE TIME + RESET ON LAND
     if (player.body.touching.down) {
+        jumpCount = 0;
         coyoteTimer = 100;
-        jumpCount = 0;           // Reset jumps when touching ground
-        player.setAngularVelocity(0); // Stop spinning when landing
-        player.angle = 0;        // Reset rotation
+        player.setAngularVelocity(0);
+        player.angle = 0;
     } else {
         coyoteTimer -= this.game.loop.delta;
     }
 
-    // Jump logic
+    // TAP-BASED JUMP
+    if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
+        tryJump.call(this);
+    }
+}
+
+function tryJump() {
     const canJump =
         player.body.touching.down ||
         coyoteTimer > 0 ||
         jumpCount < maxJumps;
 
-    if (cursors.up.isDown && canJump) {
-        player.setVelocityY(-330);
+    if (!canJump) return;
 
-        jumpCount++;
-        coyoteTimer = 0;
+    player.setVelocityY(-330);
 
-        // Play jump sound based on jump number
-        const soundKey = 'jump' + jumpCount;
-        if (this.sound.get(soundKey)) {
-            this.sound.play(soundKey);
-        } else {
-            this.sound.play('jump1'); // fallback
-        }
+    jumpCount++;
+    coyoteTimer = 0;
 
-        // Add spin effect
-        if (jumpCount >= 2) {
-            player.setAngularVelocity(200 + jumpCount * 50);
-        }
+    const soundKey = 'jump' + jumpCount;
+    if (this.sound.get(soundKey)) {
+        this.sound.play(soundKey);
+    } else {
+        this.sound.play('jump1');
+    }
+
+    if (jumpCount >= 2) {
+        player.setAngularVelocity(200 + jumpCount * 50);
     }
 }
+
 
 
 new Phaser.Game(config);
