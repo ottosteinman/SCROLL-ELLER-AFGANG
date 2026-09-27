@@ -33,7 +33,7 @@ function preload() {
     this.load.image('background', 'assets/background.png');
     this.load.image('martini_full', 'assets/martini_full.png');
     this.load.image('martini_empty', 'assets/martini_empty.png');
-    this.load.image('scrollbar_logo', 'assets/scrollbar_logo.png');
+    this.load.image('scrollbar_logo', 'assets/ScrollBarLogo.png');
 
 
 
@@ -52,7 +52,7 @@ function create() {
 
     // PARALLAX BACKGROUND LAYERS
     const bgFar = this.add.image(400, 200, 'background').setScrollFactor(0.2);
-    const bgLogo = this.add.image(400, 200, 'ScrollBarLogo').setScrollFactor(0.5);
+    const bgLogo = this.add.image(400, 200, 'scrollbar_logo').setScrollFactor(0.5);
 
     // WORLD SIZE
     this.physics.world.setBounds(0, 0, 2000, 400);
