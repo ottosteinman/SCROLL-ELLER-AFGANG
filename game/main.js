@@ -61,11 +61,18 @@ function create() {
     
     // Add ground
     const ground = this.physics.add.staticGroup();
-    ground.create(1400, 380, 'ground');
+    ground.create(400, 380, 'ground');
+    ground.create(800, 380, 'ground');
+    ground.create(1200, 380, 'ground');
+    ground.create(1600, 380, 'ground');
 
     // Add player
     player = this.physics.add.sprite(100, 200, 'player');
     player.setCollideWorldBounds(true);
+
+    // CAMERA FOLLOWER
+    this.cameras.main.startFollow(player);
+
 
     // HP UI (3 martinis)
     hpIcons = [
@@ -94,7 +101,7 @@ function create() {
         // Add death animation, restart scene, etc.
     }
 
-    this.cameras.main.startFollow(player);
+    
 
 };
 
