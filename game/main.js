@@ -5,7 +5,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 500 },
+            gravity: { y: 900 },
             debug: false
         }
     },
@@ -18,6 +18,10 @@ const config = {
 
 let player;
 let cursors;
+let jumpCount = 0;
+let maxJumps = 5;
+let coyoteTimer = 0;
+
 
 function preload() {
     // Load your images
@@ -26,7 +30,11 @@ function preload() {
 
     // Load your funny sound clips
     this.load.audio('quote', 'assets/asbjorn_quote.mp3'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
-    this.load.audio('jump', 'assets/jump.wav'); // nogle forskellige ad "HEP, HOOP, HAP, HIP, HUP, HEEH"
+    this.load.audio('jump1', 'assets/jump.wav'); // nogle forskellige ad "HEP, HOOP, HAP, HIP, HUP, HEEH"
+    this.load.audio('jump2', 'assets/jump2.wav'); // HOP
+    this.load.audio('jump3', 'assets/jump3.wav'); // HAP
+    this.load.audio('jump4', 'assets/jump4.wav'); // HIP
+    this.load.audio('jump5', 'assets/jump5.wav'); // DAVA NAHUI - hvad var den russiske ting? 
 }
 
 function create() {
@@ -41,6 +49,12 @@ function create() {
     player = this.physics.add.sprite(100, 200, 'player');
     player.setCollideWorldBounds(true);
 
+    // Movement settings
+    player.setMaxVelocity(250, 500);
+    player.setDragX(800);
+    player.setAccelerationX(0);
+
+    
     this.physics.add.collider(player, ground);
 
     // Keyboard input
@@ -48,19 +62,52 @@ function create() {
 }
 
 function update() {
+    // Horizontal movement
     if (cursors.left.isDown) {
-        player.setVelocityX(-160);
+        player.setAccelerationX(-600);
     } else if (cursors.right.isDown) {
-        player.setVelocityX(160);
+        player.setAccelerationX(600);
     } else {
-        player.setVelocityX(0);
+        player.setAccelerationX(0);
     }
 
-    if (cursors.up.isDown && player.body.touching.down) {
+    // Track coyote time
+    if (player.body.touching.down) {
+        coyoteTimer = 100;
+        jumpCount = 0;           // Reset jumps when touching ground
+        player.setAngularVelocity(0); // Stop spinning when landing
+        player.angle = 0;        // Reset rotation
+    } else {
+        coyoteTimer -= this.game.loop.delta;
+    }
+
+    // Jump logic
+    const canJump =
+        player.body.touching.down ||
+        coyoteTimer > 0 ||
+        jumpCount < maxJumps;
+
+    if (cursors.up.isDown && canJump) {
         player.setVelocityY(-330);
-        this.sound.play('jump');
+
+        jumpCount++;
+        coyoteTimer = 0;
+
+        // Play jump sound based on jump number
+        const soundKey = 'jump' + jumpCount;
+        if (this.sound.get(soundKey)) {
+            this.sound.play(soundKey);
+        } else {
+            this.sound.play('jump1'); // fallback
+        }
+
+        // Add spin effect
+        if (jumpCount >= 2) {
+            player.setAngularVelocity(200 + jumpCount * 50);
+        }
     }
 }
+
 
 new Phaser.Game(config);
 
