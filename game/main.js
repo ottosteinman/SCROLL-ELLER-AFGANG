@@ -33,6 +33,8 @@ function preload() {
     this.load.image('background', 'assets/background.png');
     this.load.image('martini_full', 'assets/martini_full.png');
     this.load.image('martini_empty', 'assets/martini_empty.png');
+    this.load.image('scrollbar_logo', 'assets/scrollbar_logo.png');
+
 
 
     // Load your funny sound clips
@@ -48,12 +50,18 @@ function create() {
     // Play your intro sound
     this.sound.play('quote');
 
-    // Background
-    this.add.image(400, 200, 'background');
+    // PARALLAX BACKGROUND LAYERS
+    const bgFar = this.add.image(400, 200, 'background').setScrollFactor(0.2);
+    const bgLogo = this.add.image(400, 200, 'ScrollBarLogo').setScrollFactor(0.5);
 
+    // WORLD SIZE
+    this.physics.world.setBounds(0, 0, 2000, 400);
+    this.cameras.main.setBounds(0, 0, 2000, 400);
+
+    
     // Add ground
     const ground = this.physics.add.staticGroup();
-    ground.create(400, 380, 'ground');
+    ground.create(1400, 380, 'ground');
 
     // Add player
     player = this.physics.add.sprite(100, 200, 'player');
@@ -85,6 +93,9 @@ function create() {
         console.log("You died!");
         // Add death animation, restart scene, etc.
     }
+
+    this.cameras.main.startFollow(player);
+
 };
 
 
