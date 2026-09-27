@@ -21,12 +21,19 @@ let cursors;
 let jumpCount = 0;
 let maxJumps = 5;
 let coyoteTimer = 0;
+let hp = 3;
+let hpIcons = [];
+
 
 
 function preload() {
     // Load your images
     this.load.image('player', 'assets/player.png');
     this.load.image('ground', 'assets/ground.png');
+    this.load.image('background', 'assets/background.png');
+    this.load.image('martini_full', 'assets/martini_full.png');
+    this.load.image('martini_empty', 'assets/martini_empty.png');
+
 
     // Load your funny sound clips
     this.load.audio('quote', 'assets/asbjorn_quote.mp3'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
@@ -41,6 +48,9 @@ function create() {
     // Play your intro sound
     this.sound.play('quote');
 
+    // Background
+    this.add.image(400, 200, 'background');
+
     // Add ground
     const ground = this.physics.add.staticGroup();
     ground.create(400, 380, 'ground');
@@ -48,6 +58,35 @@ function create() {
     // Add player
     player = this.physics.add.sprite(100, 200, 'player');
     player.setCollideWorldBounds(true);
+
+    // HP UI (3 martinis)
+    hpIcons = [
+    this.add.image(50, 40, 'martini_full').setScrollFactor(0), //kunne være scrollbar logoer 
+    this.add.image(100, 40, 'martini_full').setScrollFactor(0),
+    this.add.image(150, 40, 'martini_full').setScrollFactor(0)
+    ];
+
+    this.takeDamage = () => {
+    if (hp <= 0) return;
+
+    hp--;
+
+    // Update martini icons
+    hpIcons[hp].setTexture('martini_empty');
+
+    
+
+
+    // Optional: play a sound
+    // this.sound.play('damage');
+
+    // Optional: death logic
+    if (hp === 0) {
+        console.log("You died!");
+        // Add death animation, restart scene, etc.
+    }
+};
+
 
     // Movement settings
     player.setMaxVelocity(250, 500);
@@ -59,6 +98,9 @@ function create() {
 
     // Keyboard input
     cursors = this.input.keyboard.createCursorKeys();
+
+    // ´self-damage key for check on "o"
+    this.damageKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
 }
 
 function update() {
@@ -70,6 +112,7 @@ function update() {
     } else {
         player.setVelocityX(0);
     }
+    
 
     // COYOTE TIME + RESET ON LAND
     if (player.body.touching.down) {
@@ -85,6 +128,11 @@ function update() {
     if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
         tryJump.call(this);
     }
+    // tap-based selfdamage on "o"
+    if (Phaser.Input.Keyboard.JustDown(this.damageKey)) {
+    this.takeDamage();
+    }
+
 }
 
 function tryJump() {
