@@ -64,12 +64,13 @@ function create() {
 function update() {
     // Horizontal movement
     if (cursors.left.isDown) {
-        player.setAccelerationX(-600);
+    player.setVelocityX(-200);
     } else if (cursors.right.isDown) {
-        player.setAccelerationX(600);
+    player.setVelocityX(200);
     } else {
-        player.setAccelerationX(0);
+    player.setVelocityX(0);
     }
+
 
     // Track coyote time
     if (player.body.touching.down) {
