@@ -24,6 +24,7 @@ let coyoteTimer = 0;
 let hp = 3;
 let hpIcons = [];
 let isDead = false;
+let hasWon = false;
 
 
 function preload() {
@@ -57,6 +58,13 @@ function preload() {
     this.load.image('death1', 'assets/death1.jpg');
     this.load.image('death2', 'assets/death2.jpg');
     this.load.image('death3', 'assets/death3.jpg');
+
+    // VICTORY SEQUENCE
+    this.load.image('victory1', 'assets/victory1.jpg');
+    this.load.image('victory2', 'assets/victory2.jpg');
+    this.load.image('victory3', 'assets/victory3.jpg');
+
+    this.load.audio('victory', 'assets/victory.wav');
 
     
 }
@@ -96,10 +104,26 @@ function create() {
     }, null, this);
 
     // HP UI
+    this.add.text(
+    20,
+    40,
+    'livsvilje:',
+        {
+        fontFamily: 'Arial',
+        fontSize: '20px',
+        color: '#ffffff',
+        stroke: '#000000',
+        strokeThickness: 3
+        }
+    )
+    .setOrigin(0, 0.5)
+    .setScrollFactor(0)
+    .setDepth(10);
+
     hpIcons = [
-        this.add.image(50, 40, 'martini_full').setScrollFactor(0),
-        this.add.image(100, 40, 'martini_full').setScrollFactor(0),
-        this.add.image(150, 40, 'martini_full').setScrollFactor(0)
+    this.add.image(135, 40, 'martini_full').setScale(0.7).setScrollFactor(0).setDepth(10),
+    this.add.image(175, 40, 'martini_full').setScale(0.7).setScrollFactor(0).setDepth(10),
+    this.add.image(215, 40, 'martini_full').setScale(0.7).setScrollFactor(0).setDepth(10)
     ];
 
     // DAMAGE LOGIC
@@ -148,7 +172,12 @@ function create() {
 
 function update() {
 
-    if (isDead) return;
+    //WIN CON x >= ____ means the win area
+    if (!isDead && !hasWon && player.x >= 1800) {
+    startVictorySequence.call(this);
+    }
+
+    if (isDead || hasWon) return;
     
     // MOVEMENT
     if (cursors.left.isDown) {
@@ -393,6 +422,134 @@ function showDeathImages() {
 
                 // Otherwise wait, fade out and show next image
                 this.time.delayedCall(1000, () => {
+
+                    this.tweens.add({
+                        targets: image,
+                        alpha: 0,
+                        duration: 300,
+
+                        onComplete: () => {
+                            image.destroy();
+
+                            index++;
+                            showNextImage();
+                        }
+                    });
+                });
+            }
+        });
+    };
+
+    showNextImage();
+}
+
+function startVictorySequence() {
+    if (hasWon) return;
+
+    hasWon = true;
+
+    // STOP PLAYER
+    player.setVelocity(0, 0);
+    player.setAcceleration(0, 0);
+    player.body.setAllowGravity(false);
+    player.body.enable = false;
+
+    // REMOVE PROJECTILES
+    this.projectiles.clear(true, true);
+
+    // PLAY VICTORY SOUND
+    this.sound.play('victory');
+
+    // DARKEN BACKGROUND
+    this.add.rectangle(
+        400,
+        200,
+        800,
+        400,
+        0x000000,
+        0.8
+    )
+    .setScrollFactor(0)
+    .setDepth(100);
+
+    // VICTORY TEXT
+    const victoryText = this.add.text(
+        400,
+        200,
+        'JEG KAN ENDELIGT VÆRE ET RIGTIGT MENNESKE 😤😤😤',
+        {
+            fontFamily: 'Arial',
+            fontSize: '40px',
+            color: '#ffff00',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness: 6
+        }
+    )
+    .setOrigin(0.5)
+    .setScrollFactor(0)
+    .setDepth(200);
+
+    // Hold the message for 2 seconds
+    this.time.delayedCall(2000, () => {
+        victoryText.destroy();
+
+        showVictoryImages.call(this);
+    });
+}
+
+function showVictoryImages() {
+    const images = ['victory1', 'victory2', 'victory3'];
+
+    // Individual scale for each picture
+    const scales = [0.3, 0.3, 0.3];
+
+    let index = 0;
+
+    const showNextImage = () => {
+
+        const image = this.add.image(
+            400,
+            200,
+            images[index]
+        )
+        .setScrollFactor(0)
+        .setDepth(150)
+        .setScale(scales[index])
+        .setAlpha(0);
+
+        // FADE IN
+        this.tweens.add({
+            targets: image,
+            alpha: 1,
+            duration: 300,
+
+            onComplete: () => {
+
+                // FINAL IMAGE
+                if (index === images.length - 1) {
+
+                    const finalText = this.add.text(
+                        400,
+                        60,
+                        'SEJR!',
+                        {
+                            fontFamily: 'Arial',
+                            fontSize: '48px',
+                            color: '#ffff00',
+                            stroke: '#000000',
+                            strokeThickness: 7
+                        }
+                    )
+                    .setOrigin(0.5)
+                    .setScrollFactor(0)
+                    .setDepth(200);
+
+                    return;
+                }
+
+                // Show picture for 1.5 seconds
+                this.time.delayedCall(1500, () => {
 
                     this.tweens.add({
                         targets: image,
