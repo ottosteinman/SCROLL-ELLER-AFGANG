@@ -169,10 +169,10 @@ function update() {
     }
 
     // PROJECTILE SPAWN
-    if (Phaser.Math.Between(0, 100) === 1) {
+    if (Phaser.Math.Between(0, 500) === 1) {
         const p = this.projectiles.create(player.x + 600, Phaser.Math.Between(100, 300), 'afvist');
         p.setVelocityX(-250);
-        p.setScale(0.7);
+        p.setScale(0.3);
     }
 
     // PROJECTILE CLEANUP
@@ -197,12 +197,9 @@ function tryJump() {
     jumpCount++;
     coyoteTimer = 0;
 
+    // PLAY SOUND FOR CURRENT JUMP
     const soundKey = 'jump' + jumpCount;
-    if (this.sound.get(soundKey)) {
-        this.sound.play(soundKey);
-    } else {
-        this.sound.play('jump1');
-    }
+    this.sound.play(soundKey);
 
     if (jumpCount >= 2) {
         player.setAngularVelocity(200 + jumpCount * 50);
