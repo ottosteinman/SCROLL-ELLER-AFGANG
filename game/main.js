@@ -54,9 +54,9 @@ function preload() {
     // DEATH SEQUENCE
     this.load.audio('lightning', 'assets/lightning.wav');
  
-    this.load.image('death1', 'assets/death1.png');
-    this.load.image('death2', 'assets/death2.png');
-    this.load.image('death3', 'assets/death3.png');
+    this.load.image('death1', 'assets/death1.jpg');
+    this.load.image('death2', 'assets/death2.jpg');
+    this.load.image('death3', 'assets/death3.jpg');
 
     
 }
