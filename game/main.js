@@ -35,7 +35,7 @@ function preload() {
     this.load.image('martini_empty', 'assets/martini_empty.png');
     this.load.image('scrollbar_logo', 'assets/ScrollBarLogo.png');
     this.load.image('afvist', 'assets/ansogningafvist_transparant.png');
-    this.load.image('tequila_damage', 'assets/tequila_damage.png'); // not sure about this one
+    this.load.image('damage_red', 'assets/tequila_damage.png'); // not sure about this one
 
 
 
@@ -82,8 +82,9 @@ function create() {
     // PROJECTILES
     this.projectiles = this.physics.add.group({ allowGravity: false });
 
-    this.physics.add.overlap(player, this.projectiles, () => {
-        this.takeDamage();
+    this.physics.add.overlap(player, this.projectiles, (player, projectile) => {
+    projectile.destroy();
+    this.takeDamage();
     }, null, this);
 
     // HP UI
@@ -105,13 +106,18 @@ function create() {
         const randomKey = Phaser.Utils.Array.GetRandom(dmgSounds);
         this.sound.play(randomKey);
 
-        // TEQUILA SPLASH (make sure you load this!)
-        const splash = this.add.image(player.x, player.y - 50, 'tequila_damage').setScrollFactor(0);
+        // RED DAMAGE EFFECT
+        const damageEffect = this.add.image(
+        player.x,
+        player.y,
+        'damage_red'
+        ).setScale(0.5);
+
         this.tweens.add({
-            targets: splash,
-            alpha: 0,
-            duration: 400,
-            onComplete: () => splash.destroy()
+        targets: damageEffect,
+        alpha: 0,
+        duration: 400,
+        onComplete: () => damageEffect.destroy()
         });
 
         if (hp === 0) {
