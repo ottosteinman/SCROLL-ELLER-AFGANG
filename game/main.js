@@ -34,7 +34,7 @@ function preload() {
     this.load.image('martini_full', 'assets/martini_full.png');
     this.load.image('martini_empty', 'assets/martini_empty.png');
     this.load.image('scrollbar_logo', 'assets/ScrollBarLogo.png');
-    this.load.image('afvist', 'assets/ansogningafvist.png');
+    this.load.image('afvist', 'assets/ansogningafvist_transparant.png');
     this.load.image('tequila_damage', 'assets/tequila_damage.png'); // not sure about this one
 
 
