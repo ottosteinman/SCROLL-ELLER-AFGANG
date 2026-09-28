@@ -23,7 +23,7 @@ let maxJumps = 5;
 let coyoteTimer = 0;
 let hp = 3;
 let hpIcons = [];
-
+let isDead = false;
 
 
 function preload() {
@@ -51,6 +51,14 @@ function preload() {
     this.load.audio('dmg2', 'assets/dmg2.wav'); // HVORFOR GØRE DET
     this.load.audio('dmg3', 'assets/dmg3.wav'); // AAAAAAAAAAAAAAAAAAAAAAA
 
+    // DEATH SEQUENCE
+    this.load.audio('lightning', 'assets/lightning.wav');
+ 
+    this.load.image('death1', 'assets/death1.png');
+    this.load.image('death2', 'assets/death2.png');
+    this.load.image('death3', 'assets/death3.png');
+
+    
 }
 
 function create() {
@@ -121,7 +129,7 @@ function create() {
         });
 
         if (hp === 0) {
-            console.log("You died!");
+        startDeathSequence.call(this);
         }
     };
 
@@ -139,6 +147,9 @@ function create() {
 
 
 function update() {
+
+    if (isDead) return;
+    
     // MOVEMENT
     if (cursors.left.isDown) {
         player.setVelocityX(-200);
@@ -183,6 +194,7 @@ function update() {
     });
 }
 
+new Phaser.Game(config);
 
 function tryJump() {
     const canJump =
@@ -206,7 +218,201 @@ function tryJump() {
     }
 }
 
+function startDeathSequence() {
+    if (isDead) return;
 
+    isDead = true;
+
+    // STOP PLAYER
+    player.setVelocity(0, 0);
+    player.setAcceleration(0, 0);
+    player.body.setAllowGravity(false);
+
+    // STOP AND REMOVE PROJECTILES
+    this.projectiles.clear(true, true);
+
+    // DARKEN SCREEN
+    const darkness = this.add.rectangle(
+        400,
+        200,
+        800,
+        400,
+        0x000000,
+        0.75
+    )
+    .setScrollFactor(0)
+    .setDepth(100);
+
+    // DEATH TEXT
+    const deathText = this.add.text(
+        400,
+        200,
+        'JEG KASTES TIL\n1000 ÅRS BARLØS ARMOD!',
+        {
+            fontFamily: 'Arial',
+            fontSize: '42px',
+            color: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness: 6
+        }
+    )
+    .setOrigin(0.5)
+    .setScrollFactor(0)
+    .setDepth(101);
+
+    // Wait before lightning
+    this.time.delayedCall(2000, () => {
+
+        // LIGHTNING SOUND
+        this.sound.play('lightning');
+
+        // LIGHTNING FLASH
+        const flash = this.add.rectangle(
+            400,
+            200,
+            800,
+            400,
+            0xffffff,
+            1
+        )
+        .setScrollFactor(0)
+        .setDepth(200);
+
+        // Remove the text at the strike
+        deathText.destroy();
+
+        // Quickly fade the flash
+        this.tweens.add({
+            targets: flash,
+            alpha: 0,
+            duration: 250,
+            onComplete: () => {
+                flash.destroy();
+            }
+        });
+
+        // Start showing death images shortly afterwards
+        this.time.delayedCall(500, () => {
+            showDeathImages.call(this);
+        });
+    });
+}
+
+function showDeathImages() {
+    const images = ['death1', 'death2', 'death3'];
+    let index = 0;
+
+    const showNextImage = () => {
+
+        if (index >= images.length) {
+            return;
+        }
+
+        const image = this.add.image(
+            400,
+            200,
+            images[index]
+        )
+        .setScrollFactor(0)
+        .setDepth(150)
+        .setScale(0.5);
+
+        image.setAlpha(0);
+
+        // Fade image in
+        this.tweens.add({
+            targets: image,
+            alpha: 1,
+            duration: 300,
+
+            onComplete: () => {
+
+                // IF THIS IS THE FINAL IMAGE
+                if (index === images.length - 1) {
+
+                    // Final message
+                    const finalText = this.add.text(
+                        400,
+                        80,
+                        'HVORFOR GØRE DET!!!',
+                        {
+                            fontFamily: 'Arial',
+                            fontSize: '42px',
+                            color: '#ff0000',
+                            stroke: '#000000',
+                            strokeThickness: 6
+                        }
+                    )
+                    .setOrigin(0.5)
+                    .setScrollFactor(0)
+                    .setDepth(200);
+
+                    // SHAKE THE "HVORFOR GØRE DET!!!" TEXT
+                    this.tweens.add({
+                    targets: finalText,
+                    x: { from: 395, to: 405 },
+                    duration: 50,
+                    yoyo: true,
+                    repeat: -1
+                    });
+                    
+                    // TRY AGAIN BUTTON
+                    const retryButton = this.add.text(
+                        400,
+                        340,
+                        'BEFRI MIG FRA MIN SKÆBNE',
+                        {
+                            fontFamily: 'Arial',
+                            fontSize: '28px',
+                            color: '#ffffff',
+                            backgroundColor: '#8b0000',
+                            padding: {
+                                x: 20,
+                                y: 10
+                            }
+                        }
+                    )
+                    .setOrigin(0.5)
+                    .setScrollFactor(0)
+                    .setDepth(200)
+                    .setInteractive({ useHandCursor: true });
+
+                    // Restart game when clicked
+                    retryButton.on('pointerdown', () => {
+                        hp = 3;
+                        jumpCount = 0;
+                        coyoteTimer = 0;
+                        isDead = false;
+
+                        this.scene.restart();
+                    });
+
+                    return;
+                }
+
+                // Otherwise wait, fade out and show next image
+                this.time.delayedCall(1000, () => {
+
+                    this.tweens.add({
+                        targets: image,
+                        alpha: 0,
+                        duration: 300,
+
+                        onComplete: () => {
+                            image.destroy();
+
+                            index++;
+                            showNextImage();
+                        }
+                    });
+                });
+            }
+        });
+    };
+
+    showNextImage();
+}
 
 new Phaser.Game(config);
 
