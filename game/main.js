@@ -316,7 +316,7 @@ function showDeathImages() {
         )
         .setScrollFactor(0)
         .setDepth(150)
-        .setScale(0.3);
+        .setScale(0.4);
 
         image.setAlpha(0);
 
