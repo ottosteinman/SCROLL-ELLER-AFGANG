@@ -194,7 +194,7 @@ function update() {
     });
 }
 
-new Phaser.Game(config);
+
 
 function tryJump() {
     const canJump =
