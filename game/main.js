@@ -31,16 +31,30 @@ function preload() {
     // Load your images
     this.load.image('player', 'assets/player.png');
     this.load.image('ground', 'assets/ground.png');
-    this.load.image('background', 'assets/background.png');
+    
     this.load.image('martini_full', 'assets/martini_full.png');
     this.load.image('martini_empty', 'assets/martini_empty.png');
-    this.load.image('scrollbar_logo', 'assets/ScrollBarLogo.png');
-    this.load.image('afvist', 'assets/ansogningafvist_transparant.png');
+    
+    
     this.load.image('damage_red', 'assets/tequila_damage.png'); // not sure about this one
 
+    // LEVEL BACKGROUNDS
+    this.load.image('background1', 'assets/background1.png');
+    this.load.image('background2', 'assets/background2.png');
+    this.load.image('background3', 'assets/background3.png');
+    this.load.image('background4', 'assets/background4.png');
 
+    this.load.image('scrollbar_logo', 'assets/ScrollBarLogo.png');
+    this.load.image('scrollbar_logo2', 'assets/ScrollBarLogo2.png');
+    this.load.image('scrollbar_logo3', 'assets/ScrollBarLogo3.png');
 
-
+    // PROJECTILES
+    this.load.image('projectile_dinscrollersvag','assets/projektil_dinscrollersvag-removebg-preview.png');
+    this.load.image('projectile_duforgrimdsvr','assets/projektil_duforgrimdsvr-removebg-preview.png');
+    this.load.image('projectile_optagetbarplads','assets/projektil_optagetbarplads-removebg-preview.png');
+    this.load.image('projectile_template','assets/projektil_template-removebg-preview.png');
+    
+    
     // Load your funny sound clips
     this.load.audio('quote', 'assets/asbjorn_quote.mp3'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
     this.load.audio('jump1', 'assets/jump1.wav'); // nogle forskellige ad "HEP, HOOP, HAP, HIP, HUP, HEEH"
@@ -73,20 +87,32 @@ function create() {
     // Play intro sound
     this.sound.play('quote');
 
-    // PARALLAX BACKGROUND
-    const bgFar = this.add.image(400, 200, 'background').setScrollFactor(0.2);
-    const bgLogo = this.add.image(400, 200, 'scrollbar_logo').setScrollFactor(0.5);
+   // PARALLAX BACKGROUNDS
+
+    // Main background layer
+    this.add.image(400, 200, 'background1').setScrollFactor(0.2);
+    this.add.image(1200, 200, 'background2').setScrollFactor(0.2);
+    this.add.image(2000, 200, 'background3').setScrollFactor(0.2);
+    this.add.image(2800, 200, 'background4').setScrollFactor(0.2);
+
+    // ScrollBar logo layer - moves faster than the background
+    this.add.image(400, 200, 'scrollbar_logo').setScrollFactor(0.5);
+    this.add.image(1600, 200, 'scrollbar_logo2').setScrollFactor(0.5);
+    this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // WORLD SIZE
-    this.physics.world.setBounds(0, 0, 2000, 400);
-    this.cameras.main.setBounds(0, 0, 2000, 400);
+    const WORLD_WIDTH = 4000;
+
+    this.physics.world.setBounds(0, 0, WORLD_WIDTH, 400);
+    this.cameras.main.setBounds(0, 0, WORLD_WIDTH, 400);
+
 
     // GROUND
     const ground = this.physics.add.staticGroup();
-    ground.create(400, 380, 'ground');
-    ground.create(800, 380, 'ground');
-    ground.create(1200, 380, 'ground');
-    ground.create(1600, 380, 'ground');
+
+    for (let x = 400; x <= 4000; x += 400) {
+    ground.create(x, 380, 'ground');
+    }
 
     // PLAYER
     player = this.physics.add.sprite(100, 200, 'player');
@@ -173,7 +199,7 @@ function create() {
 function update() {
 
     //WIN CON x >= ____ means the win area
-    if (!isDead && !hasWon && player.x >= 1800) {
+    if (!isDead && !hasWon && player.x >= 3800) {
     startVictorySequence.call(this);
     }
 
@@ -209,10 +235,26 @@ function update() {
     }
 
     // PROJECTILE SPAWN
+    
+    const projectileTypes = [
+    { key: 'projectile_dinscrollersvag', scale: 0.25 },
+    { key: 'projectile_duforgrimdsvr', scale: 0.25 },
+    { key: 'projectile_optagetbarplads', scale: 0.25 },
+    { key: 'projectile_template', scale: 0.25 }
+    ];
+
     if (Phaser.Math.Between(0, 500) === 1) {
-        const p = this.projectiles.create(player.x + 600, Phaser.Math.Between(100, 300), 'afvist');
-        p.setVelocityX(-250);
-        p.setScale(0.3);
+
+    const type = Phaser.Utils.Array.GetRandom(projectileTypes);
+
+    const p = this.projectiles.create(
+        player.x + 600,
+        Phaser.Math.Between(100, 300),
+        type.key
+    );
+
+    p.setVelocityX(-250);
+    p.setScale(type.scale);
     }
 
     // PROJECTILE CLEANUP
@@ -276,7 +318,7 @@ function startDeathSequence() {
     const deathText = this.add.text(
         400,
         200,
-        'JEG KASTES TIL\n1000 ÅRS BARLØS ARMOD!',
+        'JEG BANLYSES TIL\n1000 ÅRS BARLØS ARMOD!',
         {
             fontFamily: 'Arial',
             fontSize: '42px',
@@ -478,12 +520,16 @@ function startVictorySequence() {
         200,
         'JEG KAN ENDELIGT VÆRE ET RIGTIGT MENNESKE 😤😤😤',
         {
-            fontFamily: 'Arial',
-            fontSize: '40px',
-            color: '#ffff00',
-            align: 'center',
-            stroke: '#000000',
-            strokeThickness: 6
+        fontFamily: 'Arial',
+        fontSize: '36px',
+        color: '#ffff00',
+        align: 'center',
+        stroke: '#000000',
+        strokeThickness: 6,
+        wordWrap: {
+            width: 700,
+            useAdvancedWrap: true
+            }
         }
     )
     .setOrigin(0.5)
@@ -502,7 +548,7 @@ function showVictoryImages() {
     const images = ['victory1', 'victory2', 'victory3'];
 
     // Individual scale for each picture
-    const scales = [0.3, 0.3, 0.3];
+    const scales = [0.1, 0.1, 0.1];
 
     let index = 0;
 
@@ -532,7 +578,7 @@ function showVictoryImages() {
                     const finalText = this.add.text(
                         400,
                         60,
-                        'SEJR!',
+                        'JEG SVÆLGER MIG I DÅD',
                         {
                             fontFamily: 'Arial',
                             fontSize: '48px',
