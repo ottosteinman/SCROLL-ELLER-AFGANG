@@ -105,11 +105,11 @@ function create() {
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // Finish Line!!
-    this.add.image(7800, 200, 'finish_bar')
+    this.add.image(8900, 200, 'finish_bar')
     .setDepth(5);
     
     // WORLD SIZE
-    const WORLD_WIDTH = 8000;
+    const WORLD_WIDTH = 9000;
 
     this.physics.world.setBounds(0, 0, WORLD_WIDTH, 400);
     this.cameras.main.setBounds(0, 0, WORLD_WIDTH, 400);
@@ -118,7 +118,7 @@ function create() {
     // GROUND
     const ground = this.physics.add.staticGroup();
 
-    for (let x = 400; x <= 8000; x += 400) {
+    for (let x = 400; x <= WORLD_WIDTH; x += 400) {
     ground.create(x, 380, 'ground');
     }
 
@@ -207,7 +207,7 @@ function create() {
 function update() {
 
     //WIN CON x >= ____ means the win area
-    if (!isDead && !hasWon && player.x >= 7900) {
+    if (!isDead && !hasWon && player.x >= 8900) {
     startVictorySequence.call(this);
     }
 
