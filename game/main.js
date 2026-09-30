@@ -594,24 +594,43 @@ function showVictoryImages() {
                 // FINAL IMAGE
                 if (index === images.length - 1) {
 
-                    const finalText = this.add.text(
-                        400,
-                        60,
-                        'JEG SVÆLGER MIG I DÅD',
-                        {
-                            fontFamily: 'Arial',
-                            fontSize: '48px',
-                            color: '#ffff00',
-                            stroke: '#000000',
-                            strokeThickness: 7
-                        }
-                    )
-                    .setOrigin(0.5)
-                    .setScrollFactor(0)
-                    .setDepth(200);
-
-                    return;
+                // TOP TEXT
+                const finalText = this.add.text(
+                    400,
+                    60,
+                    'JEG SVÆLGER MIG I LYKKE 🥺',
+                    {
+                    fontFamily: 'Arial',
+                    fontSize: '48px',
+                    color: '#ffff00',
+                    stroke: '#000000',
+                    strokeThickness: 7
                 }
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0)
+            .setDepth(200);
+
+
+            // BOTTOM TEXT
+            const bottomText = this.add.text(
+                400,
+                340,
+                'PINOCCHIO NO MORE 😤',
+                {
+                    fontFamily: 'Arial',
+                    fontSize: '32px',
+                    color: '#ffffff',
+                    stroke: '#000000',
+                    strokeThickness: 6
+                }
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0)
+            .setDepth(200);
+
+            return;
+        }
 
                 // Show picture for 1.5 seconds
                 this.time.delayedCall(1500, () => {
