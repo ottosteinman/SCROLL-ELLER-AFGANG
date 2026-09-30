@@ -105,7 +105,7 @@ function create() {
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // Finish Line!!
-    this.add.image(8900, 200, 'finish_bar')
+    this.add.image(9000, 200, 'finish_bar')
     .setDepth(5);
     
     // WORLD SIZE
