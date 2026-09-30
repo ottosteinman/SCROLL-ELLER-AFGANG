@@ -90,10 +90,10 @@ function create() {
    // PARALLAX BACKGROUNDS
 
     // Main background layer
-    this.add.image(400, 200, 'background1').setScrollFactor(0.2);
-    this.add.image(1200, 200, 'background2').setScrollFactor(0.2);
-    this.add.image(2000, 200, 'background3').setScrollFactor(0.2);
-    this.add.image(2800, 200, 'background4').setScrollFactor(0.2);
+    this.add.image(400, 200, 'background1').setScrollFactor(0.2).setScale(0.7);
+    this.add.image(1200, 200, 'background2').setScrollFactor(0.2).setScale(0.7);
+    this.add.image(2000, 200, 'background3').setScrollFactor(0.2).setScale(0.7);
+    this.add.image(2800, 200, 'background4').setScrollFactor(0.2).setScale(0.7);
 
     // ScrollBar logo layer - moves faster than the background
     this.add.image(400, 200, 'scrollbar_logo').setScrollFactor(0.5);
