@@ -25,6 +25,7 @@ let hp = 3;
 let hpIcons = [];
 let isDead = false;
 let hasWon = false;
+let godMode = false;
 
 
 function preload() {
@@ -105,7 +106,7 @@ function create() {
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // Finish Line!!
-    this.add.image(9000, 200, 'finish_bar')
+    this.add.image(8900, 200, 'finish_bar')
     .setDepth(5);
     
     // WORLD SIZE
@@ -161,35 +162,40 @@ function create() {
     ];
 
     // DAMAGE LOGIC
-    this.takeDamage = () => {
-        if (hp <= 0) return;
+this.takeDamage = () => {
 
-        hp--;
-        hpIcons[hp].setTexture('martini_empty');
+    // GOD MODE - IGNORE ALL DAMAGE
+    if (godMode) return;
 
-        // RANDOM DAMAGE SOUND
-        const dmgSounds = ['dmg1', 'dmg2', 'dmg3'];
-        const randomKey = Phaser.Utils.Array.GetRandom(dmgSounds);
-        this.sound.play(randomKey);
+    // Don't take damage if already dead
+    if (hp <= 0) return;
 
-        // RED DAMAGE EFFECT
-        const damageEffect = this.add.image(
+    hp--;
+    hpIcons[hp].setTexture('martini_empty');
+
+    // RANDOM DAMAGE SOUND
+    const dmgSounds = ['dmg1', 'dmg2', 'dmg3'];
+    const randomKey = Phaser.Utils.Array.GetRandom(dmgSounds);
+    this.sound.play(randomKey);
+
+    // RED DAMAGE EFFECT
+    const damageEffect = this.add.image(
         player.x,
         player.y,
         'damage_red'
-        ).setScale(0.5);
+    ).setScale(0.5);
 
-        this.tweens.add({
+    this.tweens.add({
         targets: damageEffect,
         alpha: 0,
         duration: 400,
         onComplete: () => damageEffect.destroy()
-        });
+    });
 
-        if (hp === 0) {
+    if (hp === 0) {
         startDeathSequence.call(this);
-        }
-    };
+    }
+};
 
     // MOVEMENT SETTINGS
     player.setMaxVelocity(250, 500);
@@ -201,6 +207,11 @@ function create() {
     // INPUT
     cursors = this.input.keyboard.createCursorKeys();
     this.damageKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+
+    this.input.keyboard.on('keydown-G', () => {
+    godMode = !godMode;
+    console.log('GOD MODE:', godMode ? 'ON' : 'OFF');
+    });
 }
 
 
