@@ -90,10 +90,10 @@ function create() {
    // PARALLAX BACKGROUNDS
 
     // Main background layer
-    this.add.image(400, 200, 'background1').setScrollFactor(0.2).setScale(0.8);
-    this.add.image(1200, 200, 'background2').setScrollFactor(0.2).setScale(0.8);
-    this.add.image(2000, 200, 'background3').setScrollFactor(0.2).setScale(0.8);
-    this.add.image(2800, 200, 'background4').setScrollFactor(0.2).setScale(0.8);
+    this.add.image(400, 200, 'background1').setScrollFactor(0.2).setScale(0.75);
+    this.add.image(1200, 200, 'background2').setScrollFactor(0.2).setScale(0.75);
+    this.add.image(2000, 200, 'background3').setScrollFactor(0.2).setScale(0.75);
+    this.add.image(2800, 200, 'background4').setScrollFactor(0.2).setScale(0.75);
 
     // ScrollBar logo layer - moves faster than the background
     this.add.image(400, 200, 'scrollbar_logo').setScrollFactor(0.5);
@@ -101,7 +101,7 @@ function create() {
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // WORLD SIZE
-    const WORLD_WIDTH = 6000;
+    const WORLD_WIDTH = 8000;
 
     this.physics.world.setBounds(0, 0, WORLD_WIDTH, 400);
     this.cameras.main.setBounds(0, 0, WORLD_WIDTH, 400);
@@ -110,7 +110,7 @@ function create() {
     // GROUND
     const ground = this.physics.add.staticGroup();
 
-    for (let x = 400; x <= 4000; x += 400) {
+    for (let x = 400; x <= 8000; x += 400) {
     ground.create(x, 380, 'ground');
     }
 
@@ -199,7 +199,7 @@ function create() {
 function update() {
 
     //WIN CON x >= ____ means the win area
-    if (!isDead && !hasWon && player.x >= 5900) {
+    if (!isDead && !hasWon && player.x >= 7900) {
     startVictorySequence.call(this);
     }
 
