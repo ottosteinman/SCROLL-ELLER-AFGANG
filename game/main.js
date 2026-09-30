@@ -53,6 +53,10 @@ function preload() {
     this.load.image('projectile_duforgrimdsvr','assets/projektil_duforgrimdsvr-removebg-preview.png');
     this.load.image('projectile_optagetbarplads','assets/projektil_optagetbarplads-removebg-preview.png');
     this.load.image('projectile_template','assets/projektil_template-removebg-preview.png');
+
+    // FINISH LINE
+    this.load.image('finish_bar', 'assets/VictoryBarScroll1.png');
+
     
     
     // Load your funny sound clips
@@ -100,6 +104,10 @@ function create() {
     this.add.image(1600, 200, 'scrollbar_logo2').setScrollFactor(0.5);
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
+    // Finish Line!!
+    this.add.image(7800, 200, 'finish_bar')
+    .setDepth(5);
+    
     // WORLD SIZE
     const WORLD_WIDTH = 8000;
 
