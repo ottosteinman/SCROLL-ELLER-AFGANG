@@ -101,7 +101,7 @@ function create() {
     this.add.image(2800, 200, 'scrollbar_logo3').setScrollFactor(0.5);
 
     // WORLD SIZE
-    const WORLD_WIDTH = 4000;
+    const WORLD_WIDTH = 6000;
 
     this.physics.world.setBounds(0, 0, WORLD_WIDTH, 400);
     this.cameras.main.setBounds(0, 0, WORLD_WIDTH, 400);
