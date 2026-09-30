@@ -237,10 +237,10 @@ function update() {
     // PROJECTILE SPAWN
     
     const projectileTypes = [
-    { key: 'projectile_dinscrollersvag', scale: 0.25 },
-    { key: 'projectile_duforgrimdsvr', scale: 0.25 },
-    { key: 'projectile_optagetbarplads', scale: 0.25 },
-    { key: 'projectile_template', scale: 0.25 }
+    { key: 'projectile_dinscrollersvag', scale: 0.35 },
+    { key: 'projectile_duforgrimdsvr', scale: 0.35 },
+    { key: 'projectile_optagetbarplads', scale: 0.35 },
+    { key: 'projectile_template', scale: 0.45 }
     ];
 
     if (Phaser.Math.Between(0, 500) === 1) {
