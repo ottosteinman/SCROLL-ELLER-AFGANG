@@ -258,8 +258,11 @@ body {
 .game-label {
     position: absolute;
 
-    top: -45px;
+    bottom: 100%;       /* sits directly on top of the frame, however tall it gets */
     left: 0;
+    margin-bottom: 12px;
+
+    white-space: nowrap;
 
     color: #ffe94a;
 
