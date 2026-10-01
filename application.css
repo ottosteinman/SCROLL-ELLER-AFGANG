@@ -224,7 +224,7 @@ body {
 
 
 /* =========================================
-   GAME
+   GAME AREA
    ========================================= */
 
 #game-section {
@@ -234,13 +234,46 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-color: #000000;
+    padding: 80px 20px;
 
-    overflow: hidden;
+    background: #000;
 }
+
+
+.game-frame {
+    position: relative;
+
+    border: 6px solid #ffe94a;
+
+    padding: 15px;
+
+    background: #000;
+
+    box-shadow:
+        0 0 20px rgba(255, 233, 74, 0.4),
+        0 0 60px rgba(255, 233, 74, 0.15);
+}
+
+
+.game-label {
+    position: absolute;
+
+    top: -45px;
+    left: 0;
+
+    color: #ffe94a;
+
+    font-size: 1.5rem;
+    font-weight: 900;
+
+    letter-spacing: 4px;
+}
+
 
 #game {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background: #000;
 }
