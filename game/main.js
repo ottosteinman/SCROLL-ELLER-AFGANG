@@ -1,7 +1,11 @@
 const config = {
     type: Phaser.AUTO,
+
+    parent: 'game',
+
     width: 800,
     height: 400,
+
     physics: {
         default: 'arcade',
         arcade: {
@@ -9,6 +13,7 @@ const config = {
             debug: false
         }
     },
+
     scene: {
         preload,
         create,
@@ -29,6 +34,8 @@ let godMode = false;
 
 
 function preload() {
+
+    this.load.setPath('game/');
     // Load your images
     this.load.image('player', 'assets/player.png');
     this.load.image('ground', 'assets/ground.png');
@@ -655,5 +662,26 @@ function showVictoryImages() {
     showNextImage();
 }
 
-new Phaser.Game(config);
+let phaserGame = null;
+
+const gameSection = document.getElementById('game-section');
+
+const gameObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach((entry) => {
+
+        if (entry.isIntersecting && phaserGame === null) {
+
+            phaserGame = new Phaser.Game(config);
+
+            gameObserver.disconnect();
+        }
+
+    });
+
+}, {
+    threshold: 0.3
+});
+
+gameObserver.observe(gameSection);
 
