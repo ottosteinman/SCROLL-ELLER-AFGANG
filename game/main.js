@@ -65,7 +65,8 @@ function preload() {
     // FINISH LINE
     this.load.image('finish_bar', 'assets/VictoryBarScroll1.png');
 
-    
+    //Theme of da game
+    this.load.audio('theme', 'assets/SideScrollerBarSoundTrackWithLead.mp3');
     
     // Load your funny sound clips
     this.load.audio('quote', 'assets/asbjorn_quote.mp3'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
@@ -99,6 +100,14 @@ function create() {
     // Play intro sound
     this.sound.play('quote');
 
+    // START THEME MUSIC
+    this.themeMusic = this.sound.add('theme', {
+    loop: true,
+    volume: 0.5
+    });
+ 
+    this.themeMusic.play();
+    
    // PARALLAX BACKGROUNDS
 
     // Main background layer
@@ -320,6 +329,11 @@ function startDeathSequence() {
 
     isDead = true;
 
+    // STOP THEME MUSIC
+    if (this.themeMusic) {
+    this.themeMusic.stop();
+    }
+    
     // STOP PLAYER
     player.setVelocity(0, 0);
     player.setAcceleration(0, 0);
