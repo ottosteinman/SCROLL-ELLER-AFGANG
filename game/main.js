@@ -69,7 +69,7 @@ function preload() {
     this.load.audio('theme', 'assets/SideScrollerBarSoundTrackWithLead.mp3');
     
     // Load your funny sound clips
-    this.load.audio('quote', 'assets/asbjorn_quote.mp3'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
+    this.load.audio('quote', 'assets/asbjorn_quote.wav'); // GOTTA MAKE SOME SWEET CLIPS, A WHOLE LOTTA EM' VOICEWORK TOMORROW LES GOOO - WHOLE LOTTA STUFF TO BE DONE
     this.load.audio('jump1', 'assets/jump1.wav'); // nogle forskellige ad "HEP, HOOP, HAP, HIP, HUP, HEEH"
     this.load.audio('jump2', 'assets/jump2.wav'); // HOP
     this.load.audio('jump3', 'assets/jump3.wav'); // HAP
