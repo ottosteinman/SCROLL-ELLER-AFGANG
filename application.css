@@ -37,18 +37,14 @@ body {
 }
 
 
-.video-placeholder {
+.intro-video {
     width: min(1000px, 90vw);
 
     aspect-ratio: 16 / 9;
 
     border: 4px solid #ffe94a;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
+    background: #000;
 }
 
 
